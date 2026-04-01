@@ -1,7 +1,81 @@
 import streamlit as st
+import datetime
+from streamlit_lottie import st_lottie
+import requests
+def load_lottieurl(url):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# एनीमेशन के लिंक्स (हम यहाँ दो अलग-अलग एनीमेशन लोड कर रहे हैं)
+lottie_hearts = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_96bovdur.json") # तैरते हुए दिल
+lottie_cake = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_myejig9v.json")   # नाचता हुआ केक
+    # Nobita-Shizuka का प्यारा एनिमेशन लोड करना
+lottie_nobita_shizuka = load_lottieurl("https://assets10.lottiefiles.com/private_files/lf30_k84wkkis.json") # एक साथ बैठे हुए
+
+# नया डिजाइन और फोंट सेटअप
+st.markdown("""
+    <style>
+    /* Google Font को इम्पोर्ट करना */
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+    .stApp {
+        background: linear-gradient(to right, #ff9a9e, #fecfef);
+        font-family: 'Dancing Script', cursive; /* यहाँ फोंट लागू किया गया है */
+    }
+    
+    h1, h2, h3 {
+        color: #d63384 !important;
+        text-align: center;
+        font-family: 'Dancing Script', cursive;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+st_lottie(lottie_hearts, height=300, key="hearts")
+
+# यहाँ month और day की जगह सही नंबर सोचिए
+target_date = datetime.datetime(2026, 4, 29)
+
+# आज की तारीख और समय पता करें
+today = datetime.datetime.now()
+
+# दोनों के बीच का अंतर निकालें
+time_remaining = target_date - today
+
+# दिनों की संख्या निकालें
+days = time_remaining.days
+
+# शर्त (Condition) चेक करें
+# सुंदर तरीके से टाइमर दिखाने के लिए
+days = time_remaining.days
+if days == 0:
+    st.balloons()
+    st_lottie(lottie_cake, height=200, key="cake") 
+    
+    # यहाँ Nobita-Shizuka का वो प्यारा एनीमेशन दिखेगा! 💖
+    st_lottie(lottie_nobita_shizuka, height=250, key="love_animation")
+    
+    st.header("🎉 Happy Birthday Ji! 🥳")
+    st.subheader("आज आपका सबसे खास दिन है! ❤️")
+    
+    # अगर आज ही जन्मदिन है
+    st.balloons() # ढेर सारे गुब्बारे उड़ाने के लिए
+    st.header("🎉 Happy Birthday Ji! 🥳")
+    st.subheader("आज आपका सबसे खास दिन है! ❤️")
+    
+elif days < 0:
+    # अगर जन्मदिन बीत गया है
+    st.header("🎁 आशा है आपका जन्मदिन शानदार रहा होगा!")
+else:
+    # अगर अभी दिन बाकी हैं (टाइमर दिखाएं)
+    st.subheader("🎂 आपके जन्मदिन में अब सिर्फ इतना समय बचा है:")
+    st.title(f"✨ {days} दिन ✨")
+    
+
 
 # Website ka title aur icon
-st.set_page_config(page_title="Happy Advance Birthday!", page_icon="🎂")
+st.set_page_config(page_title="Happy Birthday Ji !", page_icon="🎂")
 
 # Page change karne ke liye memory
 if 'page' not in st.session_state:
@@ -50,7 +124,7 @@ elif st.session_state.page == 4:
 # Page 5: Final Wish
 elif st.session_state.page == 5:
     st.balloons() # Screen par balloons udayega
-    st.title("🎂 Happy Advance Birthday! 🎂")
+    st.title("🎂 Happy Birthday My Mrs! 🎂")
     st.subheader("29 April 2026 Today is my Wife's Birthday!")
     st.write("Tum meri zindagi ki sabse khubsurat wajah ho. Tumhare sath har din special hota hai.")
     st.write("I love you sooooooo much my dear wife My dear Bubu ! ❤️")
